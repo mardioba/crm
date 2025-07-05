@@ -1,4 +1,4 @@
-# Sistema CRM - Django + Bootstrap
+# CRM PARA CONCESSIONÁRIAS DE VEÍCULOS = tecnologia: Django + Bootstrap
 
 Sistema de Customer Relationship Management (CRM) desenvolvido em Django com interface Bootstrap 5, focado no gerenciamento de vendas de veículos.
 
