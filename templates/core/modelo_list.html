@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Modelos de Veículos - Sistema CRM{% endblock %}
+
+{% block page_title %}Modelos de Veículos{% endblock %}
+
+{% block page_actions %}
+<a href="{% url 'core:modelo_create' %}" class="btn btn-success">
+    <i class="bi bi-plus"></i> Novo Modelo
+</a>
+<a href="{% url 'core:modelo_list' %}" class="btn btn-primary">
+    <i class="bi bi-arrow-clockwise"></i> Atualizar
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Lista de Modelos</h6>
+    </div>
+    <div class="card-body">
+        <!-- Busca e Filtros -->
+        <form method="get" class="row g-2 mb-4 align-items-end">
+            <div class="col-md-4">
+                <label for="q" class="form-label">Buscar por nome</label>
+                <input type="text" class="form-control" name="q" id="q" value="{{ query }}" placeholder="Ex: Civic, Corolla...">
+            </div>
+            <div class="col-md-3">
+                <label for="marca" class="form-label">Marca</label>
+                <select name="marca" id="marca" class="form-select">
+                    <option value="">Todas</option>
+                    {% for m in marcas %}
+                        <option value="{{ m }}" {% if marca == m %}selected{% endif %}>{{ m }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="ano" class="form-label">Ano</label>
+                <select name="ano" id="ano" class="form-select">
+                    <option value="">Todos</option>
+                    {% for a in anos %}
+                        <option value="{{ a }}" {% if ano|stringformat:'s' == a|stringformat:'s' %}selected{% endif %}>{{ a }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3 d-grid">
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="bi bi-search"></i> Filtrar
+                </button>
+            </div>
+        </form>
+        {% if modelos %}
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Marca</th>
+                            <th>Nome</th>
+                            <th>Ano</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for modelo in modelos %}
+                        <tr>
+                            <td>{{ modelo.marca }}</td>
+                            <td>{{ modelo.nome }}</td>
+                            <td>{{ modelo.ano }}</td>
+                            <td>
+                                <a href="{% url 'core:modelo_update' modelo.pk %}" class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="{% url 'core:modelo_delete' modelo.pk %}" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                                <a href="{% url 'core:veiculo_create' %}?modelo={{ modelo.pk }}" class="btn btn-sm btn-success" title="Cadastrar Veículo deste Modelo">
+                                    <i class="bi bi-plus-circle"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-4">
+                <i class="bi bi-car-front fa-3x text-muted"></i>
+                <p class="text-muted mt-2">Nenhum modelo cadastrado ainda.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

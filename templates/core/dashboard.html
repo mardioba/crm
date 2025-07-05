@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Sistema CRM{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Cards de Estatísticas -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Total de Clientes
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_clientes }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-people fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Vendas Efetuadas
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ vendas_efetuadas }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-check-circle fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Em Andamento
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ atendimentos_em_andamento }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-clock fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Veículos Disponíveis
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ veiculos_disponiveis }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-car-front fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Atendimentos Recentes -->
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Atendimentos Recentes</h6>
+                <a href="{% url 'core:atendimento_list' %}" class="btn btn-sm btn-primary">
+                    <i class="bi bi-eye"></i> Ver Todos
+                </a>
+            </div>
+            <div class="card-body">
+                {% if atendimentos_recentes %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Vendedor</th>
+                                    <th>Status</th>
+                                    <th>Data</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for atendimento in atendimentos_recentes %}
+                                <tr>
+                                    <td>{{ atendimento.cliente.nome }}</td>
+                                    <td>{{ atendimento.vendedor.get_full_name|default:atendimento.vendedor.username }}</td>
+                                    <td>
+                                        {% if atendimento.status == 'em_andamento' %}
+                                            <span class="badge bg-warning">Em Andamento</span>
+                                        {% elif atendimento.status == 'venda_efetuada' %}
+                                            <span class="badge bg-success">Venda Efetuada</span>
+                                        {% elif atendimento.status == 'venda_perdida' %}
+                                            <span class="badge bg-danger">Venda Perdida</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ atendimento.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ atendimento.data_abertura|date:"d/m/Y H:i" }}</td>
+                                    <td>
+                                        <a href="{% url 'core:atendimento_detail' atendimento.pk %}" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-inbox fa-3x text-muted"></i>
+                        <p class="text-muted mt-2">Nenhum atendimento encontrado.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Ações Rápidas -->
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Ações Rápidas</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'core:cliente_create' %}" class="btn btn-primary">
+                        <i class="bi bi-person-plus"></i> Novo Cliente
+                    </a>
+                    <a href="{% url 'core:atendimento_create' %}" class="btn btn-success">
+                        <i class="bi bi-chat-dots"></i> Novo Atendimento
+                    </a>
+                    <a href="{% url 'core:veiculo_list' %}" class="btn btn-info">
+                        <i class="bi bi-car-front"></i> Ver Veículos
+                    </a>
+                    <a href="{% url 'admin:index' %}" class="btn btn-secondary">
+                        <i class="bi bi-gear"></i> Administração
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

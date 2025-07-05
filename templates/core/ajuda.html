@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Ajuda - Sistema CRM{% endblock %}
+
+{% block page_title %}Ajuda do Sistema{% endblock %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Como usar o Sistema CRM</h6>
+    </div>
+    <div class="card-body">
+        <h5>1. Acesso ao Sistema</h5>
+        <ul>
+            <li>Faça login com seu usuário e senha.</li>
+            <li>Se esqueceu a senha, solicite ao administrador.</li>
+        </ul>
+        <h5>2. Dashboard</h5>
+        <ul>
+            <li>Veja estatísticas rápidas de clientes, atendimentos e veículos.</li>
+            <li>Acesse ações rápidas para cadastrar clientes, atendimentos e veículos.</li>
+        </ul>
+        <h5>3. Clientes</h5>
+        <ul>
+            <li>Cadastre novos clientes com nome e telefone (os demais dados são opcionais no início).</li>
+            <li>Edite ou visualize detalhes de clientes já cadastrados.</li>
+            <li>Veja todos os atendimentos relacionados a um cliente.</li>
+        </ul>
+        <h5>4. Atendimentos</h5>
+        <ul>
+            <li>Registre um novo atendimento para um cliente.</li>
+            <li>Adicione contatos (ligações, e-mails, WhatsApp) durante o atendimento.</li>
+            <li>Atualize o status do atendimento (em andamento, venda efetuada, venda perdida, cancelado).</li>
+        </ul>
+        <h5>5. Veículos</h5>
+        <ul>
+            <li>Cadastre veículos em estoque, informando modelo, cor, placa e preço.</li>
+            <li>Edite ou exclua veículos conforme necessário.</li>
+        </ul>
+        <h5>6. Modelos de Veículos</h5>
+        <ul>
+            <li>Cadastre, edite ou exclua modelos de veículos.</li>
+            <li>Ao cadastrar um veículo, selecione o modelo desejado.</li>
+        </ul>
+        <h5>7. Orçamentos</h5>
+        <ul>
+            <li>Gere orçamentos para atendimentos em andamento.</li>
+            <li>Inclua acessórios e veja o valor total automaticamente.</li>
+            <li>Orçamentos podem ser impressos ou enviados por e-mail.</li>
+        </ul>
+        <h5>8. Logo do Sistema</h5>
+        <ul>
+            <li>O administrador pode enviar ou alterar o logo do sistema em <b>Configuração &gt; Logo</b>.</li>
+            <li>O logo será exibido no topo do menu lateral.</li>
+        </ul>
+        <h5>9. Dúvidas Frequentes</h5>
+        <ul>
+            <li><b>Não consigo acessar?</b> Verifique usuário/senha ou contate o administrador.</li>
+            <li><b>Erro ao cadastrar?</b> Confira se todos os campos obrigatórios estão preenchidos.</li>
+            <li><b>Problemas com upload?</b> Use imagens JPG ou PNG de até 1MB para o logo.</li>
+        </ul>
+        <h5>10. Suporte</h5>
+        <ul>
+            <li>Para dúvidas técnicas, procure o administrador do sistema.</li>
+            <li>Para suporte avançado, consulte a documentação ou envie um e-mail para o responsável pelo sistema.</li>
+        </ul>
+        <hr>
+        <p class="text-muted small">Versão do sistema: 1.0 | Desenvolvido com Django + Bootstrap</p>
+    </div>
+</div>
+{% endblock %} 

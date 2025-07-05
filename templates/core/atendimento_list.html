@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Atendimentos - Sistema CRM{% endblock %}
+
+{% block page_title %}Atendimentos{% endblock %}
+
+{% block page_actions %}
+<a href="{% url 'core:atendimento_create' %}" class="btn btn-success">
+    <i class="bi bi-plus"></i> Novo Atendimento
+</a>
+<a href="{% url 'core:atendimento_list' %}" class="btn btn-primary">
+    <i class="bi bi-arrow-clockwise"></i> Atualizar
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Lista de Atendimentos</h6>
+    </div>
+    <div class="card-body">
+        <!-- Busca e Filtros -->
+        <form method="get" class="row g-2 mb-4 align-items-end">
+            <div class="col-md-4">
+                <label for="q" class="form-label">Buscar por cliente ou vendedor</label>
+                <input type="text" class="form-control" name="q" id="q" value="{{ query }}" placeholder="Ex: João, Maria...">
+            </div>
+            <div class="col-md-3">
+                <label for="status" class="form-label">Status</label>
+                <select name="status" id="status" class="form-select">
+                    <option value="">Todos</option>
+                    <option value="em_andamento" {% if status == 'em_andamento' %}selected{% endif %}>Em Andamento</option>
+                    <option value="venda_efetuada" {% if status == 'venda_efetuada' %}selected{% endif %}>Venda Efetuada</option>
+                    <option value="venda_perdida" {% if status == 'venda_perdida' %}selected{% endif %}>Venda Perdida</option>
+                    <option value="cancelado" {% if status == 'cancelado' %}selected{% endif %}>Cancelado</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="bi bi-search"></i> Filtrar
+                </button>
+            </div>
+        </form>
+        {% if page_obj %}
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Vendedor</th>
+                            <th>Status</th>
+                            <th>Data</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for atendimento in page_obj %}
+                        <tr>
+                            <td>{{ atendimento.id }}</td>
+                            <td>{{ atendimento.cliente.nome }}</td>
+                            <td>{{ atendimento.vendedor.get_full_name|default:atendimento.vendedor.username }}</td>
+                            <td>
+                                {% if atendimento.status == 'em_andamento' %}
+                                    <span class="badge bg-warning">Em Andamento</span>
+                                {% elif atendimento.status == 'venda_efetuada' %}
+                                    <span class="badge bg-success">Venda Efetuada</span>
+                                {% elif atendimento.status == 'venda_perdida' %}
+                                    <span class="badge bg-danger">Venda Perdida</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ atendimento.get_status_display }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ atendimento.data_abertura|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <a href="{% url 'core:atendimento_detail' atendimento.pk %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{% url 'core:atendimento_update' atendimento.pk %}" class="btn btn-sm btn-outline-warning">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- Paginação -->
+            {% if page_obj.has_other_pages %}
+            <nav aria-label="Paginação">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if query %}&q={{ query }}{% endif %}{% if status %}&status={{ status }}{% endif %}">Primeira</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if status %}&status={{ status }}{% endif %}">Anterior</a>
+                        </li>
+                    {% endif %}
+                    <li class="page-item active">
+                        <span class="page-link">
+                            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if status %}&status={{ status }}{% endif %}">Próxima</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}{% if status %}&status={{ status }}{% endif %}">Última</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center py-4">
+                <i class="bi bi-chat-dots fa-3x text-muted"></i>
+                <p class="text-muted mt-2">Nenhum atendimento encontrado.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

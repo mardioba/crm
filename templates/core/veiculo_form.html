@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Sistema CRM{% endblock %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block page_actions %}
+<a href="{% url 'core:veiculo_list' %}" class="btn btn-secondary">
+    <i class="bi bi-arrow-left"></i> Voltar
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{ title }}</h6>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ form.modelo.id_for_label }}" class="form-label">
+                            <i class="bi bi-car-front"></i> Modelo *
+                        </label>
+                        {{ form.modelo }}
+                        {% if form.modelo.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.modelo.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.placa.id_for_label }}" class="form-label">
+                            <i class="bi bi-card-text"></i> Placa
+                        </label>
+                        {{ form.placa }}
+                        {% if form.placa.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.placa.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.cor.id_for_label }}" class="form-label">
+                            <i class="bi bi-palette"></i> Cor *
+                        </label>
+                        {{ form.cor }}
+                        {% if form.cor.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.cor.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.preco.id_for_label }}" class="form-label">
+                            <i class="bi bi-currency-dollar"></i> Preço *
+                        </label>
+                        {{ form.preco }}
+                        {% if form.preco.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.preco.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-check mb-3">
+                        {{ form.disponivel }}
+                        <label for="{{ form.disponivel.id_for_label }}" class="form-check-label">
+                            Disponível para venda
+                        </label>
+                        {% if form.disponivel.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.disponivel.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'core:veiculo_list' %}" class="btn btn-secondary me-md-2">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Salvar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

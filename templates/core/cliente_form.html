@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Sistema CRM{% endblock %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block page_actions %}
+<a href="{% url 'core:cliente_list' %}" class="btn btn-secondary">
+    <i class="bi bi-arrow-left"></i> Voltar
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{ title }}</h6>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.nome.id_for_label }}" class="form-label">
+                                    <i class="bi bi-person"></i> Nome *
+                                </label>
+                                {{ form.nome }}
+                                {% if form.nome.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.nome.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.telefone.id_for_label }}" class="form-label">
+                                    <i class="bi bi-telephone"></i> Telefone *
+                                </label>
+                                {{ form.telefone }}
+                                {% if form.telefone.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.telefone.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">
+                                    <i class="bi bi-envelope"></i> E-mail
+                                </label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.email.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.cpf.id_for_label }}" class="form-label">
+                                    <i class="bi bi-card-text"></i> CPF
+                                </label>
+                                {{ form.cpf }}
+                                <small class="form-text text-muted">Formato: XXX.XXX.XXX-XX</small>
+                                {% if form.cpf.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.cpf.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.endereco.id_for_label }}" class="form-label">
+                            <i class="bi bi-geo-alt"></i> Endereço
+                        </label>
+                        {{ form.endereco }}
+                        {% if form.endereco.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.endereco.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'core:cliente_list' %}" class="btn btn-secondary me-md-2">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Salvar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Máscara para telefone (formato brasileiro)
+function maskTelefone(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 10) {
+        v = v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    } else if (v.length > 5) {
+        v = v.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else if (v.length > 2) {
+        v = v.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+    } else {
+        v = v.replace(/(\d*)/, '($1');
+    }
+    input.value = v;
+}
+
+// Máscara para CPF
+function maskCPF(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 9) {
+        v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    } else if (v.length > 6) {
+        v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
+    } else if (v.length > 3) {
+        v = v.replace(/(\d{3})(\d{0,3})/, '$1.$2');
+    }
+    input.value = v;
+}
+
+// Aplica as máscaras nos campos ao digitar
+window.addEventListener('DOMContentLoaded', function() {
+    const telInput = document.getElementById('{{ form.telefone.id_for_label }}');
+    const cpfInput = document.getElementById('{{ form.cpf.id_for_label }}');
+    if (telInput) {
+        telInput.addEventListener('input', function() { maskTelefone(telInput); });
+    }
+    if (cpfInput) {
+        cpfInput.addEventListener('input', function() { maskCPF(cpfInput); });
+    }
+});
+</script>
+{% endblock %} 
